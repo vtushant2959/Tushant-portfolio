@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tushant Verma</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#6d28d9',secondary:'#10b981'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Inter', sans-serif;
+background-color: #0f172a;
+color: #f8fafc;
+overflow-x: hidden;
+}
+h1, h2, h3, h4, h5, h6 {
+font-family: 'Montserrat', sans-serif;
+}
+.neon-glow {
+text-shadow: 0 0 5px rgba(139, 92, 246, 0.5), 0 0 10px rgba(139, 92, 246, 0.3);
+}
+.neon-border {
+box-shadow: 0 0 5px rgba(139, 92, 246, 0.5), 0 0 10px rgba(139, 92, 246, 0.3);
+}
+.glass {
+background: rgba(15, 23, 42, 0.7);
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.magnetic-item {
+transition: transform 0.3s ease;
+}
+.tilt-card {
+transform-style: preserve-3d;
+transition: transform 0.5s ease;
+}
+.tilt-card:hover {
+transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
+}
+.tilt-card-content {
+transform: translateZ(20px);
+}
+.progress-circle {
+position: relative;
+width: 100px;
+height: 100px;
+}
+.progress-circle svg {
+transform: rotate(-90deg);
+}
+.progress-circle circle {
+fill: none;
+stroke-width: 8;
+stroke-linecap: round;
+}
+.progress-circle .bg {
+stroke: rgba(255, 255, 255, 0.1);
+}
+.progress-circle .progress {
+stroke: #6d28d9;
+transition: stroke-dashoffset 1s ease;
+}
+.timeline-item::before {
+content: '';
+position: absolute;
+left: -25px;
+top: 0;
+width: 1px;
+height: 100%;
+background: linear-gradient(to bottom, rgba(109, 40, 217, 0.2), rgba(109, 40, 217, 0.8));
+}
+.timeline-item::after {
+content: '';
+position: absolute;
+left: -29px;
+top: 0;
+width: 10px;
+height: 10px;
+border-radius: 50%;
+background: #6d28d9;
+box-shadow: 0 0 10px rgba(109, 40, 217, 0.8);
+}
+.custom-switch {
+position: relative;
+display: inline-block;
+width: 50px;
+height: 24px;
+}
+.custom-switch input {
+opacity: 0;
+width: 0;
+height: 0;
+}
+.slider {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: rgba(255, 255, 255, 0.2);
+transition: .4s;
+border-radius: 24px;
+}
+.slider:before {
+position: absolute;
+content: "";
+height: 18px;
+width: 18px;
+left: 3px;
+bottom: 3px;
+background-color: white;
+transition: .4s;
+border-radius: 50%;
+}
+input:checked + .slider {
+background-color: #6d28d9;
+}
+input:checked + .slider:before {
+transform: translateX(26px);
+}
+.custom-radio {
+position: relative;
+padding-left: 30px;
+cursor: pointer;
+user-select: none;
+}
+.custom-radio input {
+position: absolute;
+opacity: 0;
+cursor: pointer;
+}
+.radio-checkmark {
+position: absolute;
+top: 0;
+left: 0;
+height: 20px;
+width: 20px;
+background-color: rgba(255, 255, 255, 0.1);
+border: 1px solid rgba(255, 255, 255, 0.3);
+border-radius: 50%;
+}
+.custom-radio:hover .radio-checkmark {
+background-color: rgba(255, 255, 255, 0.2);
+}
+.custom-radio input:checked ~ .radio-checkmark {
+background-color: rgba(109, 40, 217, 0.2);
+border-color: #6d28d9;
+}
+.radio-checkmark:after {
+content: "";
+position: absolute;
+display: none;
+}
+.custom-radio input:checked ~ .radio-checkmark:after {
+display: block;
+}
+.custom-radio .radio-checkmark:after {
+top: 5px;
+left: 5px;
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: #6d28d9;
+box-shadow: 0 0 5px rgba(109, 40, 217, 0.5);
+}
+#particles-js {
+position: absolute;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+z-index: -1;
+}
+.typing-animation::after {
+content: '|';
+animation: blink 1s infinite;
+}
+@keyframes blink {
+0%, 100% { opacity: 1; }
+50% { opacity: 0; }
+}
+.scroll-indicator {
+animation: bounce 2s infinite;
+}
+@keyframes bounce {
+0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+40% { transform: translateY(-10px); }
+60% { transform: translateY(-5px); }
+}
+.page-transition {
+animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+.chatbot-bubble {
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(109, 40, 217, 0.7); }
+70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(109, 40, 217, 0); }
+100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(109, 40, 217, 0); }
+}
+</style>
+</head>
+<body>
+<div id="particles-js"></div>
+<!-- Navigation -->
+<nav class="glass fixed top-0 left-0 right-0 z-50 py-4 px-8">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <a href="index.html" class="flex items-center">
+        <img src="Tus.png" alt="Logo" class="h-10 w-auto object-contain" />
+      </a>
+      <div class="hidden md:flex space-x-8">
+        <a href="#home" class="magnetic-item text-white hover:text-primary transition-colors">Home</a>
+        <a href="#about" class="magnetic-item text-white hover:text-primary transition-colors">About</a>
+        <a href="#projects" class="magnetic-item text-white hover:text-primary transition-colors">Projects</a>
+        <a href="#resume" class="magnetic-item text-white hover:text-primary transition-colors">Resume</a>
+        <a href="#contact" class="magnetic-item text-white hover:text-primary transition-colors">Contact</a>
+      </div>
+      <div class="flex items-center space-x-4">
+        <label class="custom-switch">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider"></span>
+        </label>
+        <button class="md:hidden text-white focus:outline-none">
+          <div class="w-8 h-8 flex items-center justify-center">
+            <i class="ri-menu-line ri-lg"></i>
+          </div>
+        </button>
+      </div>
+    </div>
+  </nav>
+<!-- Mobile Menu -->
+<div class="hidden fixed inset-0 z-40 glass page-transition" id="mobile-menu">
+<div class="flex flex-col items-center justify-center h-full space-y-8">
+<a href="#home" class="text-xl text-white hover:text-primary transition-colors">Home</a>
+<a href="#about" class="text-xl text-white hover:text-primary transition-colors">About</a>
+<a href="#projects" class="text-xl text-white hover:text-primary transition-colors">Projects</a>
+<a href="#resume" class="text-xl text-white hover:text-primary transition-colors">Resume</a>
+<a href="#contact" class="text-xl text-white hover:text-primary transition-colors">Contact</a>
+<button class="absolute top-6 right-6 text-white focus:outline-none">
+<div class="w-8 h-8 flex items-center justify-center">
+<i class="ri-close-line ri-lg"></i>
+</div>
+</button>
+</div>
+</div>
+<!-- Home Section -->
+<section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden py-20 px-4">
+<div class="max-w-7xl mx-auto text-center z-10">
+<h1 class="text-5xl md:text-7xl font-bold mb-6 neon-glow">
+<span class="text-primary">Tushant</span> Verma
+</h1>
+<p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto typing-animation">
+Creative Developer & Digital Creator
+</p>
+<div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 justify-center">
+<a href="#projects" class="bg-primary hover:bg-opacity-80 text-white px-8 py-3 !rounded-button neon-border transition-all whitespace-nowrap">
+View My Work
+</a>
+<a href="#contact" class="bg-transparent border border-primary text-primary hover:bg-primary hover:bg-opacity-10 px-8 py-3 !rounded-button transition-all whitespace-nowrap">
+Get In Touch
+</a>
+</div>
+</div>
+<div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 scroll-indicator">
+<div class="w-8 h-8 flex items-center justify-center text-white">
+<i class="ri-arrow-down-line ri-lg"></i>
+</div>
+</div>
+</section>
+<!-- About Section -->
+<section id="about" class="py-20 px-4">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl font-bold mb-16 text-center neon-glow">About <span class="text-primary">Me</span></h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-20">
+<div class="glass p-8 !rounded-lg relative overflow-hidden">
+<h3 class="text-2xl font-semibold mb-6">My Story</h3>
+<p class="mb-4">
+    I'm a passionate Web Developer who blends tradition with innovation. I specialize in responsive website design, web development, Android app development, content writing, and digital marketing. With expertise in HTML, CSS, JavaScript, and modern SEO practices, I create fast, SEO-optimized websites that drive real results. </p>
+<p class="mb-4">
+    Every project is crafted with creativity, precision, and a focus on user experience. Always learning, always building - because in a world that never stops evolving, your website shouldn’t either.</p>
+<p>Let’s create something powerful and future-proof.</p>
+</div>
+<div class="glass p-8 !rounded-lg">
+<h3 class="text-2xl font-semibold mb-6">Skills & Expertise</h3>
+<div class="grid grid-cols-2 gap-8">
+<div class="flex flex-col items-center">
+<div class="progress-circle mb-4">
+<svg width="100" height="100">
+<circle class="bg" cx="50" cy="50" r="46" />
+<circle class="progress" cx="50" cy="50" r="46" stroke-dasharray="289.03" stroke-dashoffset="57.81" />
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-xl font-semibold">80%</span>
+</div>
+</div>
+<span class="text-center">Front-end Development</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="progress-circle mb-4">
+<svg width="100" height="100">
+<circle class="bg" cx="50" cy="50" r="46" />
+<circle class="progress" cx="50" cy="50" r="46" stroke-dasharray="289.03" stroke-dashoffset="86.71" />
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-xl font-semibold">70%</span>
+</div>
+</div>
+<span class="text-center">Android Development</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="progress-circle mb-4">
+<svg width="100" height="100">
+<circle class="bg" cx="50" cy="50" r="46" />
+<circle class="progress" cx="50" cy="50" r="46" stroke-dasharray="289.03" stroke-dashoffset="115.61" />
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-xl font-semibold">60%</span>
+</div>
+</div>
+<span class="text-center">Backend Development</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="progress-circle mb-4">
+<svg width="100" height="100">
+<circle class="bg" cx="50" cy="50" r="46" />
+<circle class="progress" cx="50" cy="50" r="46" stroke-dasharray="289.03" stroke-dashoffset="72.26" />
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="text-xl font-semibold">75%</span>
+</div>
+</div>
+<span class="text-center">Digital Creation</span>
+</div>
+</div>
+</div>
+</div>
+<div class="glass p-8 !rounded-lg">
+<h3 class="text-2xl font-semibold mb-8 text-center">Experience Timeline</h3>
+<div class="relative pl-8">
+<div class="timeline-item relative pl-8 pb-12">
+<h4 class="text-xl font-semibold mb-2">Senior Web Developer & Digital Marketer</h4>
+<p class="text-primary mb-1">JindalX | 2024 - Present</p>
+<p>At JindalX, I led website design and development projects using cutting-edge web technologies. I crafted and executed SEO, SEM, and content marketing strategies, leveraging Google Analytics to track and optimize campaign performance. I partnered with marketing teams to deliver data-driven digital marketing campaigns that maximized ROI.</p>
+</div>
+<div class="timeline-item relative pl-8 pb-12">
+<h4 class="text-xl font-semibold mb-2">Junior Web Developer</h4>
+<p class="text-primary mb-1">ADA Tech Pvt. Ltd.| 2023 - 2024</p>
+<p>At ADA Tech Solutions, I specialized in SEO-driven web development and digital marketing. I increased organic traffic with strategic content marketing, managed paid advertising campaigns (Google Ads, Facebook Ads), optimized email campaigns through A/B testing, and collaborated with designers for high-conversion landing pages.</p>
+</div>
+<div class="timeline-item relative pl-8 pb-12">
+<h4 class="text-xl font-semibold mb-2">Web Developer</h4>
+<p class="text-primary mb-1">CLA Academy of Education | 2022 - 2022</p>
+<p>As a Web Developer at CLA Academy of Education, I managed social media marketing campaigns, optimized website content for SEO and SEM, and supported targeted email marketing initiatives. I analyzed digital performance through Google Analytics, boosting website traffic and brand visibility.</p>
+</div>
+<div class="timeline-item relative pl-8">
+<h4 class="text-xl font-semibold mb-2">Digital Marketer</h4>
+<p class="text-primary mb-1">CLA Academy of Education| 2021 - 2012</p>
+<p>Driving SEO strategies, social media marketing, and content creation to boost online visibility and student enrollment. I managed ad campaigns, optimized website traffic, and built a strong digital presence, blending traditional education values with modern marketing techniques..</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Projects Section -->
+<section id="projects" class="py-20 px-4">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl font-bold mb-16 text-center neon-glow">My <span class="text-primary">Projects</span></h2>
+<div class="flex justify-center mb-10">
+<div class="glass inline-flex p-1 !rounded-full">
+<label class="custom-radio mx-2 py-2 px-4 flex items-center">
+<input type="radio" name="project-filter" value="all" checked>
+<span class="radio-checkmark"></span>
+All
+</label>
+<label class="custom-radio mx-2 py-2 px-4 flex items-center">
+<input type="radio" name="project-filter" value="web">
+<span class="radio-checkmark"></span>
+Web
+</label>
+<label class="custom-radio mx-2 py-2 px-4 flex items-center">
+<input type="radio" name="project-filter" value="mobile">
+<span class="radio-checkmark"></span>
+Mobile
+</label>
+<label class="custom-radio mx-2 py-2 px-4 flex items-center">
+<input type="radio" name="project-filter" value="3d">
+<span class="radio-checkmark"></span>
+3D
+</label>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="tilt-card glass overflow-hidden !rounded-lg">
+<div class="relative h-48">
+<img src="https://public.readdy.ai/ai/img_res/c645947cf3137108b99f45aa69e58a90.jpg" alt="Project 1" class="w-full h-full object-cover object-top">
+<div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
+</div>
+<div class="p-6 tilt-card-content">
+<h3 class="text-xl font-semibold mb-2">Nebula Dashboard</h3>
+<p class="text-sm text-gray-300 mb-4">A futuristic admin dashboard with real-time data visualization and customizable widgets.</p>
+<div class="flex flexap gap-2 mb-4">
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">React</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">D3.js</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Firebase</span>
+</div>
+<button class="text-primary hover:text-white hover:bg-primary transition-colors text-sm px-4 py-2 !rounded-button border border-primary whitespace-nowrap">View Project</button>
+</div>
+</div>
+<div class="tilt-card glass overflow-hidden !rounded-lg">
+<div class="relative h-48">
+<img src="https://public.readdy.ai/ai/img_res/0aa998c35a393c432cb188b2a37dba6c.jpg" alt="Project 2" class="w-full h-full object-cover object-top">
+<div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
+</div>
+<div class="p-6 tilt-card-content">
+<h3 class="text-xl font-semibold mb-2">Pulse Music App</h3>
+<p class="text-sm text-gray-300 mb-4">A music streaming application with AI-powered recommendations and immersive visualizations.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Swift</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Kotlin</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">TensorFlow</span>
+</div>
+<button class="text-primary hover:text-white hover:bg-primary transition-colors text-sm px-4 py-2 !rounded-button border border-primary whitespace-nowrap">View Project</button>
+</div>
+</div>
+<div class="tilt-card glass overflow-hidden !rounded-lg">
+<div class="relative h-48">
+<img src="https://public.readdy.ai/ai/img_res/d36dc91fb90ff4b333da13d6e1407a8a.jpg" alt="Project 3" class="w-full h-full object-cover object-top">
+<div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
+</div>
+<div class="p-6 tilt-card-content">
+<h3 class="text-xl font-semibold mb-2">Nexus VR Experience</h3>
+<p class="text-sm text-gray-300 mb-4">An immersive virtual reality experience showcasing interactive 3D environments and physics simulations.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Unity</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">C#</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Oculus SDK</span>
+</div>
+<button class="text-primary hover:text-white hover:bg-primary transition-colors text-sm px-4 py-2 !rounded-button border border-primary whitespace-nowrap">View Project</button>
+</div>
+</div>
+<div class="tilt-card glass overflow-hidden !rounded-lg">
+<div class="relative h-48">
+<img src="https://public.readdy.ai/ai/img_res/a6bd437281ae6a96c10be8020170cc92.jpg" alt="Project 4" class="w-full h-full object-cover object-top">
+<div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
+</div>
+<div class="p-6 tilt-card-content">
+<h3 class="text-xl font-semibold mb-2">Quantum E-Commerce</h3>
+<p class="text-sm text-gray-300 mb-4">A next-generation e-commerce platform with AR product previews and personalized shopping experiences.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Next.js</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">GraphQL</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Stripe</span>
+</div>
+<button class="text-primary hover:text-white hover:bg-primary transition-colors text-sm px-4 py-2 !rounded-button border border-primary whitespace-nowrap">View Project</button>
+</div>
+</div>
+<div class="tilt-card glass overflow-hidden !rounded-lg">
+<div class="relative h-48">
+<img src="https://public.readdy.ai/ai/img_res/2e65d0274d7e74606cc27dcd9cdf1e02.jpg" alt="Project 5" class="w-full h-full object-cover object-top">
+<div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
+</div>
+<div class="p-6 tilt-card-content">
+<h3 class="text-xl font-semibold mb-2">Crypto Nexus</h3>
+<p class="text-sm text-gray-300 mb-4">A blockchain-based platform for secure digital asset management with real-time market analytics.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Solidity</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Web3.js</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">React</span>
+</div>
+<button class="text-primary hover:text-white hover:bg-primary transition-colors text-sm px-4 py-2 !rounded-button border border-primary whitespace-nowrap">View Project</button>
+</div>
+</div>
+<div class="tilt-card glass overflow-hidden !rounded-lg">
+<div class="relative h-48">
+<img src="https://public.readdy.ai/ai/img_res/375de0776b9303665cae43692b418c3d.jpg" alt="Project 6" class="w-full h-full object-cover object-top">
+<div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] to-transparent"></div>
+</div>
+<div class="p-6 tilt-card-content">
+<h3 class="text-xl font-semibold mb-2">Echo AI Assistant</h3>
+<p class="text-sm text-gray-300 mb-4">An intelligent virtual assistant with natural language processing and contextual understanding capabilities.</p>
+<div class="flex flex-wrap gap-2 mb-4">
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Python</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">TensorFlow</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Flask</span>
+</div>
+<button class="text-primary hover:text-white hover:bg-primary transition-colors text-sm px-4 py-2 !rounded-button border border-primary whitespace-nowrap">View Project</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Resume Section -->
+<section id="resume" class="py-20 px-4">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl font-bold mb-16 text-center neon-glow">My <span class="text-primary">Resume</span></h2>
+<div class="glass p-8 !rounded-lg mb-10">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="col-span-1">
+<h3 class="text-2xl font-semibold mb-6">Education</h3>
+<div class="mb-6">
+<h4 class="text-lg font-semibold">Diploma in Computer Science</h4>
+<p class="text-primary">GLA University| 2019 - 2022</p>
+<p class="text-sm mt-2">Specialized in Human-Computer Interaction and Advanced Visualization Techniques.</p>
+</div>
+<div>
+<h4 class="text-lg font-semibold">Diploma in Basic of Computer Concepts</h4>
+<p class="text-primary">CSC Academy| 2018 - 2019</p>
+<p class="text-sm mt-2">Graduated with honors. Focus on Software Engineering and UI/UX Design.</p>
+</div>
+</div>
+<div class="col-span-1">
+<h3 class="text-2xl font-semibold mb-6">Technical Skills</h3>
+<div class="space-y-4">
+<div>
+<p class="mb-1 flex justify-between">
+<span>HTML, CSS, JS</span>
+<span>Expert</span>
+</p>
+<div class="w-full bg-gray-700 !rounded-full h-2">
+<div class="bg-primary h-2 !rounded-full" style="width: 95%"></div>
+</div>
+</div>
+<div>
+<p class="mb-1 flex justify-between">
+<span>React / Vue / Angular</span>
+<span>Advanced</span>
+</p>
+<div class="w-full bg-gray-700 !rounded-full h-2">
+<div class="bg-primary h-2 !rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<div>
+<p class="mb-1 flex justify-between">
+<span>Three.js / WebGL</span>
+<span>Intermediate</span>
+</p>
+<div class="w-full bg-gray-700 !rounded-full h-2">
+<div class="bg-primary h-2 !rounded-full" style="width: 70%"></div>
+</div>
+</div>
+<div>
+<p class="mb-1 flex justify-between">
+<span>Node.js / Express</span>
+<span>Advanced</span>
+</p>
+<div class="w-full bg-gray-700 !rounded-full h-2">
+<div class="bg-primary h-2 !rounded-full" style="width: 80%"></div>
+</div>
+</div>
+<div>
+<p class="mb-1 flex justify-between">
+<span>Python</span>
+<span>Advanced</span>
+</p>
+<div class="w-full bg-gray-700 !rounded-full h-2">
+<div class="bg-primary h-2 !rounded-full" style="width: 85%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-1">
+<h3 class="text-2xl font-semibold mb-6">Certifications</h3>
+<div class="space-y-4">
+<div class="glass p-3 !rounded-md">
+<h4 class="font-semibold">AWS for Data Science</h4>
+<p class="text-sm text-primary">Simplilearn| 2025</p>
+</div>
+<div class="glass p-3 !rounded-md">
+<h4 class="font-semibold">Introduction to Deepseek and Qwens</h4>
+<p class="text-sm text-primary">Simplilearn | 2024</p>
+</div>
+<div class="glass p-3 !rounded-md">
+<h4 class="font-semibold">Power BI</h4>
+<p class="text-sm text-primary">Udemy | 2023</p>
+</div>
+<div class="glass p-3 !rounded-md">
+<h4 class="font-semibold">Web Developing and Digital Marketing</h4>
+<p class="text-sm text-primary">Udemy | 2021</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-center">
+<a href="#" class="bg-primary hover:bg-opacity-80 text-white px-8 py-3 !rounded-button neon-border transition-all flex items-center space-x-2 whitespace-nowrap">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-download-line"></i>
+</div>
+<span>Download Full Resume</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section id="contact" class="py-20 px-4">
+<div class="max-w-7xl mx-auto">
+<h2 class="text-4xl font-bold mb-16 text-center neon-glow">Get In <span class="text-primary">Touch</span></h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<div class="glass p-8 !rounded-lg">
+<h3 class="text-2xl font-semibold mb-6">Send Me a Message</h3>
+<form>
+<div class="mb-6">
+<label for="name" class="block mb-2">Your Name</label>
+<input type="text" id="name" class="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 !rounded-lg focus:outline-none focus:border-primary transition-colors" placeholder="John Doe">
+</div>
+<div class="mb-6">
+<label for="email" class="block mb-2">Your Email</label>
+<input type="email" id="email" class="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 !rounded-lg focus:outline-none focus:border-primary transition-colors" placeholder="john@example.com">
+</div>
+<div class="mb-6">
+<label for="subject" class="block mb-2">Subject</label>
+<input type="text" id="subject" class="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 !rounded-lg focus:outline-none focus:border-primary transition-colors" placeholder="Project Inquiry">
+</div>
+<div class="mb-6">
+<label for="message" class="block mb-2">Your Message</label>
+<textarea id="message" rows="5" class="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 !rounded-lg focus:outline-none focus:border-primary transition-colors" placeholder="Hello, I'd like to discuss a potential project..."></textarea>
+</div>
+<button type="submit" class="bg-primary hover:bg-opacity-80 text-white px-8 py-3 !rounded-button neon-border transition-all whitespace-nowrap">Send Message</button>
+</form>
+</div>
+<div>
+<div class="glass p-8 !rounded-lg mb-8">
+<h3 class="text-2xl font-semibold mb-6">Contact Information</h3>
+<div class="space-y-4">
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 flex items-center justify-center text-primary bg-primary bg-opacity-10 !rounded-full">
+<i class="ri-mail-line ri-lg"></i>
+</div>
+<div>
+<h4 class="font-semibold">Email</h4>
+<p class="text-gray-300">vtushant2000@gmail.com.com</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 flex items-center justify-center text-primary bg-primary bg-opacity-10 !rounded-full">
+<i class="ri-phone-line ri-lg"></i>
+</div>
+<div>
+<h4 class="font-semibold">Phone</h4>
+<p class="text-gray-300">+91 78190-92959</p>
+</div>
+</div>
+<div class="flex items-start space-x-4">
+<div class="w-10 h-10 flex items-center justify-center text-primary bg-primary bg-opacity-10 !rounded-full">
+<i class="ri-map-pin-line ri-lg"></i>
+</div>
+<div>
+<h4 class="font-semibold">Location</h4>
+<p class="text-gray-300">Old Faridabad, Faridabad, Haryana</p>
+</div>
+</div>
+</div>
+</div>
+<div class="glass p-8 !rounded-lg">
+<h3 class="text-2xl font-semibold mb-6">Follow Me</h3>
+<div class="flex space-x-4">
+<a href="https://github.com/vtushant2959" class="w-10 h-10 flex items-center justify-center text-white hover:text-primary bg-gray-800 hover:bg-gray-700 !rounded-full transition-colors">
+<i class="ri-github-fill ri-lg"></i>
+</a>
+<a href="https://www.linkedin.com/in/tushant-verma-585129318/" class="w-10 h-10 flex items-center justify-center text-white hover:text-primary bg-gray-800 hover:bg-gray-700 !rounded-full transition-colors">
+<i class="ri-linkedin-fill ri-lg"></i>
+</a>
+<a href="https://www.instagram.com/_this_is_tushant.verma/" class="w-10 h-10 flex items-center justify-center text-white hover:text-primary bg-gray-800 hover:bg-gray-700 !rounded-full transition-colors">
+<i class="ri-instagram-fill ri-lg"></i>
+</a>
+<a href="https://dribbble.com/vtushant2959" class="w-10 h-10 flex items-center justify-center text-white hover:text-primary bg-gray-800 hover:bg-gray-700 !rounded-full transition-colors">
+<i class="ri-dribbble-fill ri-lg"></i>
+</a>
+<a href="https://www.behance.net/tushantverma1" class="w-10 h-10 flex items-center justify-center text-white hover:text-primary bg-gray-800 hover:bg-gray-700 !rounded-full transition-colors">
+<i class="ri-behance-fill ri-lg"></i>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="py-10 px-4 border-t border-gray-800">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-center">
+<div class="mb-6 md:mb-0">
+    <a href="index.html" class="flex items-center">
+        <img src="Tus.png" alt="Logo" class="h-10 w-auto object-contain" />
+      </a>
+<p class="mt-2 text-gray-400">Creating digital experiences that inspire.</p>
+</div>
+<div class="flex flex-col items-center md:items-end">
+<p class="text-gray-400 mb-2">© 2025 Tushant Verma. All rights reserved.</p>
+<p class="text-gray-500 text-sm">Last updated: April 7, 2025</p>
+</div>
+</div>
+</div>
+</footer>
+<!-- Project Modal -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" id="project-modal">
+<div class="absolute inset-0 bg-black bg-opacity-80" id="modal-overlay"></div>
+<div class="glass relative w-full max-w-4xl max-h-[90vh] overflow-y-auto !rounded-lg z-10">
+<button class="absolute top-4 right-4 text-white hover:text-primary focus:outline-none" id="close-modal">
+<div class="w-8 h-8 flex items-center justify-center">
+<i class="ri-close-line ri-lg"></i>
+</div>
+</button>
+<div class="p-6">
+<div class="relative h-64 md:h-80 mb-6">
+<img src="https://public.readdy.ai/ai/img_res/542ce11e1cb96fec717e83609edc3252.jpg" alt="Project Preview" class="w-full h-full object-cover object-top !rounded-lg">
+</div>
+<h3 class="text-2xl font-bold mb-4">Nebula Dashboard</h3>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">React</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">D3.js</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Firebase</span>
+<span class="text-xs bg-primary bg-opacity-20 text-primary px-2 py-1 !rounded-full">Tailwind CSS</span>
+</div>
+<div class="prose prose-invert max-w-none mb-6">
+<p>Nebula Dashboard is a futuristic admin dashboard designed for data-driven businesses. It features real-time data visualization, customizable widgets, and a sleek user interface.</p>
+<p>The dashboard was built with React for the frontend, D3.js for data visualization, and Firebase for backend services. The UI was designed with a dark theme and neon accents to reduce eye strain during extended use while maintaining a modern aesthetic.</p>
+<h4>Key Features:</h4>
+<ul>
+<li>Real-time data synchronization</li>
+<li>Customizable widget layout with drag-and-drop functionality</li>
+<li>Interactive charts and graphs with animation</li>
+<li>Dark mode optimized for extended use</li>
+<li>Responsive design for desktop and tablet</li>
+</ul>
+<p>The project was completed in 3 months and is currently being used by several tech startups to monitor their business metrics.</p>
+</div>
+<div class="flex space-x-4">
+<a href="#" class="bg-primary hover:bg-opacity-80 text-white px-6 py-2 !rounded-button transition-all flex items-center space-x-2 whitespace-nowrap">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+<span>Live Demo</span>
+</a>
+<a href="#" class="bg-transparent border border-primary text-primary hover:bg-primary hover:bg-opacity-10 px-6 py-2 !rounded-button transition-all flex items-center space-x-2 whitespace-nowrap">
+<div class="w-5 h-5 flex items-center justify-center">
+<i class="ri-github-line"></i>
+</div>
+<span>View Code</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Chatbot -->
+<div class="fixed bottom-6 right-6 z-40">
+<button class="chatbot-bubble w-14 h-14 flex items-center justify-center bg-primary !rounded-full shadow-lg focus:outline-none">
+<div class="w-8 h-8 flex items-center justify-center text-white">
+<i class="ri-message-3-line ri-lg"></i>
+</div>
+</button>
+</div>
+<script>
+// Particles Background
+document.addEventListener('DOMContentLoaded', function() {
+const canvas = document.createElement('canvas');
+canvas.id = 'particles-js';
+document.body.appendChild(canvas);
+const ctx = canvas.getContext('2d');
+let width = window.innerWidth;
+let height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
+const particles = [];
+const particleCount = 100;
+for (let i = 0; i < particleCount; i++) {
+particles.push({
+x: Math.random() * width,
+y: Math.random() * height,
+radius: Math.random() * 2 + 1,
+color: `rgba(${Math.floor(Math.random() * 100 + 100)}, ${Math.floor(Math.random() * 100 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.random() * 0.5 + 0.1})`,
+speed: Math.random() * 0.5 + 0.1
+});
+}
+function animate() {
+requestAnimationFrame(animate);
+ctx.clearRect(0, 0, width, height);
+for (let i = 0; i < particleCount; i++) {
+const p = particles[i];
+ctx.beginPath();
+ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+ctx.fillStyle = p.color;
+ctx.fill();
+p.y += p.speed;
+if (p.y > height) {
+p.y = 0;
+p.x = Math.random() * width;
+}
+}
+}
+animate();
+window.addEventListener('resize', function() {
+width = window.innerWidth;
+height = window.innerHeight;
+canvas.width = width;
+canvas.height = height;
+});
+});
+// Typing Animation
+document.addEventListener('DOMContentLoaded', function() {
+const typingElement = document.querySelector('.typing-animation');
+const fullText = "Creative Developer & UI/UX Designer";
+let currentText = "";
+let index = 0;
+function type() {
+if (index < fullText.length) {
+currentText += fullText.charAt(index);
+typingElement.textContent = currentText;
+index++;
+setTimeout(type, 100);
+}
+}
+setTimeout(type, 1000);
+});
+// Mobile Menu Toggle
+document.addEventListener('DOMContentLoaded', function() {
+const menuButton = document.querySelector('button.md\\:hidden');
+const closeButton = document.querySelector('#mobile-menu button');
+const mobileMenu = document.getElementById('mobile-menu');
+const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
+menuButton.addEventListener('click', function() {
+mobileMenu.classList.remove('hidden');
+});
+closeButton.addEventListener('click', function() {
+mobileMenu.classList.add('hidden');
+});
+mobileMenuLinks.forEach(link => {
+link.addEventListener('click', function() {
+mobileMenu.classList.add('hidden');
+});
+});
+});
+// Project Modal
+document.addEventListener('DOMContentLoaded', function() {
+const projectButtons = document.querySelectorAll('#projects button');
+const projectModal = document.getElementById('project-modal');
+const closeModal = document.getElementById('close-modal');
+const modalOverlay = document.getElementById('modal-overlay');
+projectButtons.forEach(button => {
+button.addEventListener('click', function() {
+projectModal.classList.remove('hidden');
+document.body.style.overflow = 'hidden';
+});
+});
+function hideModal() {
+projectModal.classList.add('hidden');
+document.body.style.overflow = 'auto';
+}
+closeModal.addEventListener('click', hideModal);
+modalOverlay.addEventListener('click', hideModal);
+// Project Filter
+const filterRadios = document.querySelectorAll('input[name="project-filter"]');
+const projectCards = document.querySelectorAll('#projects .tilt-card');
+filterRadios.forEach(radio => {
+radio.addEventListener('change', function() {
+const filterValue = this.value;
+projectCards.forEach(card => {
+if (filterValue === 'all') {
+card.style.display = 'block';
+} else {
+const tags = card.querySelectorAll('.text-xs');
+let hasTag = false;
+tags.forEach(tag => {
+if (tag.textContent.toLowerCase().includes(filterValue.toLowerCase())) {
+hasTag = true;
+}
+});
+card.style.display = hasTag ? 'block' : 'none';
+}
+});
+});
+});
+});
+// Magnetic Effect on Nav Items
+document.addEventListener('DOMContentLoaded', function() {
+const magneticItems = document.querySelectorAll('.magnetic-item');
+magneticItems.forEach(item => {
+item.addEventListener('mousemove', function(e) {
+const rect = this.getBoundingClientRect();
+const x = e.clientX - rect.left - rect.width / 2;
+const y = e.clientY - rect.top - rect.height / 2;
+this.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+});
+item.addEventListener('mouseleave', function() {
+this.style.transform = 'translate(0, 0)';
+});
+});
+});
+// Theme Toggle
+document.addEventListener('DOMContentLoaded', function() {
+const themeToggle = document.getElementById('theme-toggle');
+const body = document.body;
+themeToggle.addEventListener('change', function() {
+if (this.checked) {
+body.classList.add('light-theme');
+body.style.backgroundColor = '#f8fafc';
+body.style.color = '#0f172a';
+} else {
+body.classList.remove('light-theme');
+body.style.backgroundColor = '#0f172a';
+body.style.color = '#f8fafc';
+}
+});
+});
+// Chatbot Toggle
+document.addEventListener('DOMContentLoaded', function() {
+const chatbotButton = document.querySelector('.chatbot-bubble');
+chatbotButton.addEventListener('click', function() {
+alert('AI Assistant is currently in development. Please check back soon!');
+});
+});
+// Scroll Animation
+document.addEventListener('DOMContentLoaded', function() {
+const scrollElements = document.querySelectorAll('.glass');
+function elementInView(el) {
+const rect = el.getBoundingClientRect();
+return (
+rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+rect.bottom >= 0
+);
+}
+function displayScrollElement(element) {
+element.classList.add('page-transition');
+}
+function hideScrollElement(element) {
+element.classList.remove('page-transition');
+}
+function handleScrollAnimation() {
+scrollElements.forEach((el) => {
+if (elementInView(el)) {
+displayScrollElement(el);
+} else {
+hideScrollElement(el);
+}
+});
+}
+window.addEventListener('scroll', handleScrollAnimation);
+handleScrollAnimation();
+});
+</script>
+</body>
+</html>
